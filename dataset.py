@@ -49,7 +49,7 @@ def mel_spectrogram(y, n_fft, num_mels, sampling_rate, hop_size, win_size, fmin,
 
     global mel_basis, hann_window
     if fmax not in mel_basis:
-        mel = librosa_mel_fn(sampling_rate, n_fft, num_mels, fmin, fmax)
+        mel = librosa_mel_fn(sr=sampling_rate, n_fft=n_fft, n_mels=num_mels, fmin=fmin, fmax=fmax)
         mel_basis[str(fmax)+'_'+str(y.device)] = torch.from_numpy(mel).float().to(y.device)
         hann_window[str(y.device)] = torch.hann_window(win_size).to(y.device)
 
@@ -411,8 +411,8 @@ class CodeDataset(torch.utils.data.Dataset):
             if code_buffer[0] is not None: code = code_buffer
 
 
-        mel_loss = mel_spectrogram(audio, self.n_fft, self.num_mels,
-                                   self.sampling_rate, self.hop_size, self.win_size, self.fmin, self.fmax_loss,
+        mel_loss = mel_spectrogram(y=audio, n_fft=self.n_fft, num_mels=self.num_mels,
+                                  sampling_rate=self.sampling_rate, hop_size=self.hop_size, win_size=self.win_size, fmin=self.fmin, fmax=self.fmax_loss,
                                    center=False)
 
         if self.vqvae:

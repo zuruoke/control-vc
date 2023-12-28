@@ -10,3 +10,4 @@ ffmpeg
 tqdm
 fairseq
 psola
+resampy
